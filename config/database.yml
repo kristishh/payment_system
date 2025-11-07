@@ -1,0 +1,17 @@
+default: &default
+  adapter: postgresql # <-- CHANGE THIS
+  encoding: unicode
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+  host: localhost
+
+development:
+  <<: *default
+  database: payment_system_development
+  username: postgres
+  password: password
+
+test:
+  <<: *default
+  database: payment_system_test
+  username: postgres
+  password: password
