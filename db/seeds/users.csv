@@ -1,0 +1,6 @@
+email,password,role,merchant_name,merchant_description
+john_doe@example.com,johnDoe123,merchant,Store Alpha,Our first test store.
+johnSmith1@example.com,johnSmith123,merchant,Store Beta,A great place to shop.
+elenaDoe@example.com,elenaDoe123,merchant,"Elena's Store",A great place to shop.
+admin@example.com,strongPassword!,admin,NULL,NULL
+second_admin@example.com,strongPasswordSecond,admin,NULL,NULL
