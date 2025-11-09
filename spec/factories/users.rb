@@ -5,6 +5,7 @@ FactoryBot.define do
 
     trait :merchant do
       role { 'merchant' }
+      association :merchant
     end
 
     trait :admin do
