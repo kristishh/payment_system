@@ -10,7 +10,7 @@ class UserCreation
           name: merchant_params[:name],
           description: merchant_params[:description],
           status: :active,
-          total_transaction_sum: 0,
+          total_transaction_sum: 0
         )
         @user.merchant.update!(merchant_params)
         merchant.assign_attributes(merchant_params)

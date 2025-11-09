@@ -3,10 +3,10 @@ class User < ApplicationRecord
   include ActionView::Helpers::NumberHelper
 
   devise :database_authenticatable,
-    :validatable,
-    :registerable,
-    :jwt_authenticatable,
-    jwt_revocation_strategy: self
+         :validatable,
+         :registerable,
+         :jwt_authenticatable,
+         jwt_revocation_strategy: self
 
   after_initialize :set_default_role, if: :new_record?
 
@@ -14,7 +14,7 @@ class User < ApplicationRecord
 
   has_one :merchant, dependent: :destroy
 
-  validates :email, format: { with: URI::MailTo::EMAIL_REGEXP, message: "must be a valid email address" }, presence: true, uniqueness: { case_sensitive: false }
+  validates :email, format: { with: URI::MailTo::EMAIL_REGEXP, message: 'must be a valid email address' }, presence: true, uniqueness: { case_sensitive: false }
 
   private
 
