@@ -1,5 +1,12 @@
 class User < ApplicationRecord
-  devise :database_authenticatable, :registerable
+  include Devise::JWT::RevocationStrategies::JTIMatcher
+  include ActionView::Helpers::NumberHelper
+
+  devise :database_authenticatable,
+    :validatable,
+    :registerable,
+    :jwt_authenticatable,
+    jwt_revocation_strategy: self
 
   after_initialize :set_default_role, if: :new_record?
 

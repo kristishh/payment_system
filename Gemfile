@@ -19,9 +19,11 @@ gem "tzinfo-data", platforms: %i[windows jruby]
 gem "bootsnap", require: false
 
 # Use Rack CORS for handling Cross-Origin Resource Sharing (CORS), making cross-origin Ajax possible
-gem "rack-cors"
+gem "devise", "~> 4.9"
 
-gem 'devise', '~> 4.9', '>= 4.9.4'
+gem "devise-jwt", "~> 0.11.0"
+
+gem "rack-cors", "~> 2.0"
 
 gem 'csv'
 
@@ -31,4 +33,9 @@ group :development, :test do
 
   # Audits gems for known security defects (use config/bundler-audit.yml to ignore issues)
   gem "bundler-audit", require: false
+  gem 'rspec-rails'
+  gem "factory_bot_rails", "~> 6.4"
+  gem 'faker'
+  gem "database_cleaner", "~> 2.0"
+  gem 'shoulda-matchers', '~> 6.0'
 end
