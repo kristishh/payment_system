@@ -12,4 +12,6 @@ Rails.application.routes.draw do
       sessions: 'sessions'
     }
   }
+
+  resources :transactions, only: [:create]
 end

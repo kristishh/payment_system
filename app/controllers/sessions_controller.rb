@@ -6,7 +6,7 @@ class SessionsController < Devise::SessionsController
   private
 
   def respond_with(current_user, _opts = {})
-    if resource.persisted?
+    if user_signed_in?
       render json: {
         status: {
           code: 200, message: 'Logged in successfully.',
