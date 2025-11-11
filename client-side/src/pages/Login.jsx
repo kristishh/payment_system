@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from "react-router-dom";
-import { login } from "../lib/authService"
+import { useDispatch, useSelector } from 'react-redux'
+import { loginUser } from '../store/slices/userSlice';
 
 const InputField = ({ id, label, type, value, onChange, required }) => (
   <div>
@@ -19,7 +20,7 @@ const InputField = ({ id, label, type, value, onChange, required }) => (
   </div>
 );
 
-const Alert = ({ type, text }) => {
+const Alert = ({ text }) => {
   if (!text) return
 
   const baseClass = "p-3 mb-4 text-white text-sm rounded-lg";
@@ -34,34 +35,24 @@ const Alert = ({ type, text }) => {
 
 
 const Login = () => {
+  const dispatch = useDispatch();
+  const { authError, authLoading } = useSelector(state => state.user);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState(null);
   const navigate = useNavigate()
 
   const handleLogin = (e) => {
     e.preventDefault();
-    setMessage(null);
     setLoading(true);
 
-    if (!email || !password) {
-      setLoading(false);
-      setMessage({ type: 'error', text: 'Please enter both email and password.' });
-    }
-
     setTimeout(async () => {
-      const response = await login(email, password)
-
       setLoading(false);
+      await dispatch(loginUser({ email, password })).unwrap();
 
-      if (response.statusText === "OK") {
+      if (!authError) {
         navigate('/dashboard')
-      } else {
-        setMessage({ type: 'error', text: response.response.data.error });
       }
-
-      setLoading(false);
     }, 1500);
   };
 
@@ -69,7 +60,7 @@ const Login = () => {
     <div className="min-h-screen flex items-center justify-center p-4 bg-linear-to-br from-cyan-50 to-teal-100">
       <div className="w-full max-w-sm bg-white p-6 md:p-8 rounded-xl shadow-2xl">
         <h2 className="text-3xl font-extrabold text-gray-900 text-center mb-6">Sign In</h2>
-        {message && <Alert type={message?.type} text={message?.text} />}
+        <Alert text={authError} />
         <form className="space-y-6" onSubmit={handleLogin}>
           <InputField
             id="email"
