@@ -6,12 +6,13 @@ Rails.application.routes.draw do
   devise_for :user, {
     path: '', path_names: {
                 sign_in: 'login',
-                sign_out: 'logout'
+                sign_out: 'logout',
               },
     controllers: {
-      sessions: 'sessions'
+      sessions: 'sessions',
     }
   }
 
   resources :transactions, only: [:create]
+  resources :users, only: [:index]
 end
