@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux'
-import { loginUser } from '../store/slices/userSlice';
+import { fetchCurrentUser, loginUser } from '../store/slices/userSlice';
 
 const InputField = ({ id, label, type, value, onChange, required }) => (
   <div>
@@ -36,7 +36,7 @@ const Alert = ({ text }) => {
 
 const Login = () => {
   const dispatch = useDispatch();
-  const { authError, authLoading } = useSelector(state => state.user);
+  const { authError, user  } = useSelector(state => state.user);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
@@ -55,6 +55,15 @@ const Login = () => {
       }
     }, 1500);
   };
+  
+    useEffect(() => {
+      const loadUser = async () => {
+        await dispatch(fetchCurrentUser()).unwrap()
+      };
+      loadUser()
+    }, [])
+
+    if(user !== null) navigate('/dashboard')
 
   return (
     <div className="min-h-screen flex items-center justify-center p-4 bg-linear-to-br from-cyan-50 to-teal-100">

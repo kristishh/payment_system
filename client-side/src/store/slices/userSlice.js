@@ -1,10 +1,12 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import { login } from '../../lib/authService'
+import { login, removeAuthToken } from '../../lib/authService'
+import apiCall from '../../helpers/api';
 
 const initialUserState = {
-  details: null,
+  user: null,
   authLoading: false,
   authError: null,
+  userLoading: true,
 };
 
 export const loginUser = createAsyncThunk(
@@ -17,6 +19,23 @@ export const loginUser = createAsyncThunk(
 
       return res.data
     }).catch((e) => {
+      throw new Error(e)
+    })
+  }
+);
+
+export const fetchCurrentUser = createAsyncThunk(
+  'user/get',
+  async () => {
+    return await apiCall('get', '/users',).then((res => {
+      if (res.statusText !== "OK") {
+        throw res.response.data.error
+      }
+
+      return res.data
+    })).catch((e) => {
+      removeAuthToken()
+
       throw new Error(e)
     })
   }
@@ -48,10 +67,23 @@ const userSlice = createSlice({
         state.authLoading = false;
         state.authError = action.error.message
       })
-    //     .addCase(logoutUser.fulfilled, () => {
-    //       // Resetting state to initial state upon successful logout
-    //       return { ...initialUserState, isAuthenticated: false, details: null, isAuthReady: true };
-    //     });
+      .addCase(fetchCurrentUser.pending, (state, action) => {
+        state.user = null
+        state.userLoading = true;
+        state.authError = null
+      })
+      .addCase(fetchCurrentUser.fulfilled, (state, action) => {
+        state.user = action.payload.user
+        state.userLoading = false;
+      })
+      .addCase(fetchCurrentUser.rejected, (state, action) => {
+        state.user = null
+        state.userLoading = false
+      })
+      .addCase(logoutUser.fulfilled, () => {
+        state.user = null
+        state.userLoading = false
+      });
   },
 });
 
