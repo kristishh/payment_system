@@ -44,6 +44,7 @@ group :test do
   gem 'database_cleaner', '~> 2.0'
   gem 'factory_bot_rails', '~> 6.4'
   gem 'faker'
+  gem 'rails-controller-testing'
   gem 'rspec-rails'
   gem 'shoulda-matchers', '~> 6.0'
 end

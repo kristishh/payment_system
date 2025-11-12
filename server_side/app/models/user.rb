@@ -16,6 +16,10 @@ class User < ApplicationRecord
 
   validates :email, format: { with: URI::MailTo::EMAIL_REGEXP, message: 'must be a valid email address' }, presence: true, uniqueness: { case_sensitive: false }
 
+  def admin?
+    role == 'admin'
+  end
+
   private
 
   def set_default_role

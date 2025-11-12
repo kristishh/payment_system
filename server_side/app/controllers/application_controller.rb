@@ -4,7 +4,7 @@ class ApplicationController < ActionController::API
   private
 
   def authorize_user!
-    is_authorized = request.fullpath.split('/')[1] == 'admin' && current_user&.is_admin?
+    is_authorized = current_user&.admin?
 
     render json: { message: "You're not authorized" }, status: :unauthorized unless is_authorized
   end
