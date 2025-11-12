@@ -1,5 +1,5 @@
 class Merchant < ApplicationRecord
-  belongs_to :user
+  belongs_to :user, dependent: :destroy
 
   has_many :transactions, dependent: :restrict_with_error
 
@@ -11,6 +11,10 @@ class Merchant < ApplicationRecord
   enum :status, { inactive: 0, active: 1 }
 
   private
+
+  def destroy_user
+    user.destroy!
+  end
 
   def set_default_status
     self.status ||= :active

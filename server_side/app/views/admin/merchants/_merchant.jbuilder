@@ -1,6 +1,7 @@
 json.extract! merchant.user,
               :email
 json.extract! merchant,
+              :id,
               :name,
               :description,
               :status

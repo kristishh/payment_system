@@ -4,10 +4,11 @@ Rails.application.routes.draw do
   get 'up' => 'rails/health#show', as: :rails_health_check
 
   devise_for :user, {
-    path: '', path_names: {
-                sign_in: 'login',
-                sign_out: 'logout'
-              },
+    path: '',
+    path_names: {
+      sign_in: 'login',
+      sign_out: 'logout'
+    },
     controllers: {
       sessions: 'sessions'
     }
@@ -17,6 +18,6 @@ Rails.application.routes.draw do
   resources :users, only: [:index]
 
   namespace :admin do
-    resources :merchants, only: [:index]
+    resources :merchants, only: %i[index update destroy]
   end
 end
