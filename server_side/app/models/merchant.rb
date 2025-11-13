@@ -7,6 +7,7 @@ class Merchant < ApplicationRecord
   validates :total_transaction_sum, presence: true, numericality: { greater_than_or_equal_to: 0 }
 
   after_initialize :set_default_status, if: :new_record?
+  after_destroy :destroy_user
 
   enum :status, { inactive: 0, active: 1 }
 

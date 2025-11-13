@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { removeAuthToken } from '../lib/authService';
 
 // Assuming Rails is running on port 3000
 const API_URL = 'http://localhost:3000';
@@ -49,6 +50,10 @@ const apiCall = async (method, endpoint, data = {}) => {
 
     return response
   } catch (error) {
+    if (error.statusText === 'Unauthorized') {
+      removeAuthToken()
+    }
+
     return error
   }
 };
