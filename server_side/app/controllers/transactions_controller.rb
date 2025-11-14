@@ -1,5 +1,5 @@
 class TransactionsController < ApplicationController
-  before_action :set_merchant
+  before_action :set_merchant, only: :create
 
   def create
     processor = TransactionProcessor.new(
@@ -18,6 +18,16 @@ class TransactionsController < ApplicationController
   rescue StandardError => e
     Rails.logger.error "Transaction creation failed unexpectedly: #{e.message}"
     render json: { errors: ['An unexpected server error occurred.'] }, status: :internal_server_error
+  end
+
+  def index
+    @transactions = if current_user.admin?
+                      Transaction.initial_transactions
+                    else
+                      Merchant.find_by(user_id: current_user.id).transactions.initial_transactions
+                    end
+
+    render :index
   end
 
   private

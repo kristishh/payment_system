@@ -1,6 +1,7 @@
 class Transaction < ApplicationRecord
   belongs_to :merchant
   belongs_to :reference_transaction, class_name: 'Transaction', optional: true
+  has_many :referenced_transactions, class_name: 'Transaction', foreign_key: 'reference_transaction_id', dependent: :delete_all
 
   self.primary_key = 'id'
 
@@ -24,6 +25,7 @@ class Transaction < ApplicationRecord
   before_validation :set_default_status, on: :create
 
   scope :approved_or_refunded, -> { where(status: %i[approved refunded]) }
+  scope :initial_transactions, -> { where(reference_transaction_id: nil).includes(:referenced_transactions).order(created_at: :desc) }
 
   private
 

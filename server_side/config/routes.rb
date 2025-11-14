@@ -14,7 +14,7 @@ Rails.application.routes.draw do
     }
   }
 
-  resources :transactions, only: [:create]
+  resources :transactions, only: %i[index create]
   resources :users, only: [:index]
 
   namespace :admin do
