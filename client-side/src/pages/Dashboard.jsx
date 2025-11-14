@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { fetchCurrentUser } from '../store/slices/userSlice';
 import UserInfoCard from '../components/dashboard/UserInfoCard';
 import NavTabs from '../components/dashboard/NavTabs'
-import Transactions from '../components/dashboard/Transactions';
+import Transactions from '../components/transactions/Transactions';
 import Merchants from '../components/merchants/Merchants';
 
 const tabs = [

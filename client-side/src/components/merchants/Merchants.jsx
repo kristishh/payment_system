@@ -34,7 +34,7 @@ const Merchants = () => {
       await dispatch(getAllMerchants()).unwrap()
     }
 
-    loadMerchants()
+    if (!allMerchants) loadMerchants()
   }, [])
 
   if (merchantsLoading) return null
