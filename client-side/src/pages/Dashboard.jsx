@@ -2,7 +2,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from "react-router-dom";
-import { Card, Container } from 'react-bootstrap';
 import { fetchCurrentUser } from '../store/slices/userSlice';
 import UserInfoCard from '../components/dashboard/UserInfoCard';
 import NavTabs from '../components/dashboard/NavTabs'
@@ -17,9 +16,9 @@ const Dashboard = () => {
   const dispatch = useDispatch();
   const { user, userLoading } = useSelector(state => state.user);
   const navigate = useNavigate()
-  const [activeTab, setActiveTab] = useState('transactions');
+  const [activeTab, setActiveTab] = useState('merchants');
   const memoTabs = useMemo(() => {
-    if (user?.role === 'admin') {
+    if (user?.role === 'admin' && tabs.length === 1) {
       tabs.push({ id: 'merchants', label: 'Merchants' });
     }
     return tabs;
@@ -36,11 +35,10 @@ const Dashboard = () => {
   }, [])
 
   useEffect(() => {
-    if (user && user?.role === 'merchant' && activeTab === 'merchants') {
+    if (user && user?.role === 'merchant') {
       setActiveTab('transactions');
     }
-  }, [user, activeTab]);
-
+  }, [user]);
 
   if (!user) {
     navigate('/login')

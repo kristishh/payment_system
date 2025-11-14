@@ -5,6 +5,7 @@ import apiCall from '../../helpers/api';
 const initialUserState = {
   allMerchants: null,
   merchantsLoading: true,
+  updateMerchantError: null,
 };
 
 export const getAllMerchants = createAsyncThunk(
@@ -25,8 +26,23 @@ export const getAllMerchants = createAsyncThunk(
 export const deleteMerchant = createAsyncThunk(
   'merchant/deleteMerchant',
   async ({ merchant }) => {
-    return await apiCall('delete', `/admin/merchants/${merchant.id}`,).then((res => {
+    return await apiCall('delete', `/admin/merchants/${merchant.id}`).then((res => {
       if (res.status !== 204) {
+        throw res.response.data.error
+      }
+
+      return merchant
+    })).catch((e) => {
+      throw new Error(e)
+    })
+  }
+);
+
+export const updateMerchant = createAsyncThunk(
+  'merchant/updateMerchant',
+  async ({ merchant }) => {
+    return await apiCall('put', `/admin/merchants/${merchant.id}`, merchant).then((res => {
+      if (res.statusText !== "OK") {
         throw res.response.data.error
       }
 
@@ -51,6 +67,12 @@ const merchantSlice = createSlice({
       })
       .addCase(deleteMerchant.fulfilled, (state, action) => {
         state.allMerchants = state.allMerchants.filter(merchant => merchant.id !== action.payload.id)
+      })
+      .addCase(updateMerchant.fulfilled, (state, action) => {
+        state.updateMerchantError = null
+      })
+      .addCase(updateMerchant.rejected, (state, action) => {
+        state.updateMerchantError = action.payload
       })
   },
 });

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-import { Container, Table, Button, Badge, CardText } from 'react-bootstrap';
+import { Table, Button, Badge, CardText } from 'react-bootstrap';
 import { Edit, Trash2 } from 'lucide-react';
 import { deleteMerchant, getAllMerchants } from '../../store/slices/merchantSlice';
 import DeleteConfirmationModal from './DeleteConfirmationModal';
@@ -10,6 +11,7 @@ const Merchants = () => {
   const { allMerchants, merchantsLoading } = useSelector(state => state.merchant)
   const [showDeleteModal, setShowDeleteModal] = useState(false)
   const [merchantToDelete, setMerchantToDelete] = useState(null)
+  const navigate = useNavigate()
 
   const handleDelete = (id) => {
     const merchant = allMerchants.find(merchant => id === merchant.id)
@@ -23,8 +25,8 @@ const Merchants = () => {
     await dispatch(deleteMerchant({ merchant: merchantToDelete })).unwrap()
   };
 
-  const handleEdit = (merchant) => {
-    console.log(merchant);
+  const handleEdit = (merchantId) => {
+    navigate(`/edit/${merchantId}`)
   }
 
   useEffect(() => {
@@ -52,8 +54,8 @@ const Merchants = () => {
             </tr>
           </thead>
           {allMerchants.map((merchant) => (
-            <tbody>
-              <tr key={`${merchant.id} ${merchant.email}`}>
+            <tbody key={`${merchant.id} ${merchant.email}`}>
+              <tr>
                 <td>{merchant.name}</td>
                 <td>{merchant.email}</td>
                 <td className="text-truncate" style={{ maxWidth: '250px' }}>{merchant.description}</td>
@@ -89,7 +91,7 @@ const Merchants = () => {
               </tr>
             </tbody>
           ))}
-        </Table>
+        </Table >
       ) : (
         <CardText className='shadow-none'>No merchants found.</CardText>
       )}
